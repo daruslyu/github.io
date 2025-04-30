@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>新北市政府國家賠償事件求償權行使基準</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #2d5ca4; }
+        table { border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #aaa; padding: 8px 16px; text-align: center; }
+        th { background-color: #f0f6ff; }
+        input[type="number"] { width: 120px; padding: 5px; }
+        button { padding: 6px 20px; font-size: 16px; margin-top: 10px; }
+        #resultTable { margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <h1>新北市政府國家賠償事件求償權行使基準</h1>
+
+    <form id="calcForm" onsubmit="return false;">
+        <table>
+            <tr>
+                <th>賠償金額（元）</th>
+                <td>
+                    <input type="number" id="amount" min="0" required>
+                </td>
+            </tr>
+        </table>
+        <button type="button" onclick="calculate()">計算</button>
+    </form>
+
+    <table id="resultTable" style="display:none;">
+        <tr>
+            <th>輸入賠償金額（元）</th>
+            <th>應分擔求償額度（元）</th>
+        </tr>
+        <tr>
+            <td id="inputAmount"></td>
+            <td id="claimAmount"></td>
+        </tr>
+    </table>
+
+    <script>
+        function calculate() {
+            var amt = parseInt(document.getElementById('amount').value, 10);
+            if (isNaN(amt) || amt < 0) {
+                alert('請輸入正確的賠償金額');
+                return;
+            }
+
+            var claim = 0;
+            // 2萬元以內
+            claim += Math.min(amt, 20000) * 0.5;
+            // 2萬~5萬元
+            if (amt > 20000) claim += Math.min(amt - 20000, 30000) * 0.3;
+            // 5萬~20萬元
+            if (amt > 50000) claim += Math.min(amt - 50000, 150000) * 0.2;
+            // 20萬元以上
+            if (amt > 200000) claim += (amt - 200000) * 0.05;
+
+            document.getElementById('inputAmount').innerText = amt.toLocaleString();
+            document.getElementById('claimAmount').innerText = Math.round(claim).toLocaleString();
+            document.getElementById('resultTable').style.display = '';
+        }
+    </script>
+</body>
+</html>
